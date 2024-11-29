@@ -21,6 +21,7 @@ type ContactDetails = {
 const client = new SESClient({ region: SES_REGION });
 
 export const handler: SQSHandler = async (event: any) => {
+    //logs for error handling if needed
   console.log("SES_EMAIL_FROM:", SES_EMAIL_FROM);
   console.log("SES_EMAIL_TO:", SES_EMAIL_TO);
   console.log("SES_REGION:", SES_REGION);
@@ -36,18 +37,23 @@ export const handler: SQSHandler = async (event: any) => {
       for (const messageRecord of snsMessage.Records) {
         const s3e = messageRecord.s3;
         const srcBucket = s3e.bucket.name;
+
+        //object may have spaces and or/ non asci characters in it.
         const srcKey = decodeURIComponent(s3e.object.key.replace(/\+/g, " "));
 
-        try {
-          const name = "The Photo Album";
-          const message = `We received your Image. Its URL is s3://${srcBucket}/${srcKey}`;
-          const params = sendEmailParams({ name, email: SES_EMAIL_FROM, message });
+        const fileExtension = srcKey.split('.').pop()?.toLowerCase();
+        if (fileExtension !== "jpeg" && fileExtension !== "png") {
+          try {
+            const name = "The Photo Album";
+            const message = `Image ${srcKey} has been rejected. It is an invalid file type`;
+            const params = sendEmailParams({ name, email: SES_EMAIL_FROM, message });
 
-          console.log("SES Email Params:", JSON.stringify(params, null, 2));
+            console.log("SES Email Params:", JSON.stringify(params, null, 2));
 
-          await client.send(new SendEmailCommand(params));
-        } catch (error) {
-          console.log("ERROR:", error);
+            await client.send(new SendEmailCommand(params));
+          } catch (error) {
+            console.log("ERROR:", error);
+          }
         }
       }
     }
@@ -68,7 +74,7 @@ function sendEmailParams({ name, email, message }: ContactDetails): SendEmailCom
       },
       Subject: {
         Charset: "UTF-8",
-        Data: `New Image Upload`,
+        Data: `Rejection Notification`,
       },
     },
     Source: SES_EMAIL_FROM,
@@ -79,7 +85,7 @@ function getHtmlContent({ name, email, message }: ContactDetails): string {
   return `
     <html>
       <body>
-        <h2>Sent from:</h2>
+        <h2>Rejection Details:</h2>
         <ul>
           <li style="font-size:18px">👤 <b>${name}</b></li>
           <li style="font-size:18px">✉️ <b>${email}</b></li>
