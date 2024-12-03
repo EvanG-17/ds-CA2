@@ -33,15 +33,18 @@ e.g.
 
 e.g.
 
-+ Confirmation Mailer - Not implemented.
++ Confirmation Mailer - Fully implemented.
 + Process Image - Fully implemented.
 + Update Table - Fully implemented.
-+ Delete Table - Partially Implemented
-+ etc
++ Delete Table - Fully Implemented.
++ Delete Bucket Image - Fully Implemented.
++ Confirmation Mailer Lambda Trigger - Fully Implemented.
 
 
 
 To begin, please ensure a **env.ts** file is created in the root directory of the cloned file.
+
+Please ensure that these email addresses have been verified on AWS.
 
 Here is the file format below:
 
