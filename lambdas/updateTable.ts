@@ -15,7 +15,6 @@ export const handler: SNSHandler = async (event: SNSEvent) => {
       continue;
     }
     const { id, value } = snsMessage;
-
     //only works if id and value are here
     if (id && value) {
       await updateTable(id, metadataType, value);
@@ -23,7 +22,7 @@ export const handler: SNSHandler = async (event: SNSEvent) => {
   }
 };
 
-// Function to update the DynamoDB table
+// updateTable function
 const updateTable = async (id: string, metadataType: string, value: string) => {
   const params = {
     TableName: TABLE_NAME,

@@ -9,6 +9,9 @@ import * as sns from "aws-cdk-lib/aws-sns";
 import * as subs from "aws-cdk-lib/aws-sns-subscriptions";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import { StreamViewType } from "aws-cdk-lib/aws-dynamodb";
+import { DynamoEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 
 import { Construct } from "constructs";
 
@@ -22,6 +25,7 @@ export class EDAAppStack extends cdk.Stack {
       partitionKey: { name: "ImageName", type: dynamodb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       tableName: "Images",
+      stream: StreamViewType.NEW_IMAGE, // stream for items
     });
 
     const imagesBucket = new s3.Bucket(this, "images", {
@@ -132,6 +136,14 @@ export class EDAAppStack extends cdk.Stack {
             allowlist: ["Caption", "Date", "Photographer"],
           }),
         },
+      })
+    );
+
+    // DynamoDB stream --> Lambda
+    updateTableFn.addEventSource(
+      new events.DynamoEventSource(imagesTable, {
+        startingPosition: StartingPosition.TRIM_HORIZON,
+        batchSize: 5,
       })
     );
 
