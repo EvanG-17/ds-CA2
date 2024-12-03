@@ -8,19 +8,12 @@ __YouTube Demo link__ - [The URL of the video demonstration of the app.]
 
 ### Phase 1.
 
-[ List the Lambda functions in this phase's architecture and state their working status - Fully implemented / Partially working / Not implemented. For partially working lambdas, state briefly what is defective in their implementation.]
-
-e.g.
 
 + Confirmation Mailer - Fully implemented.
 + Rejection Mailer - Fully implemented.
-+ Log Image -  Fully implemented. 
++ Process Image -  Fully implemented. 
 
 ### Phase 2 (if relevant).
-
-[ List the Lambda functions in this phase's architecture and state their working status - Fully implemented / Partially working / Not implemented. For partially working lambdas, state briefly what is defective in their implementation.]
-
-e.g.
 
 + Confirmation Mailer - Fully implemented.
 + Rejection Mailer - Fully implemented 
@@ -29,16 +22,13 @@ e.g.
 
 ### Phase 3 (if relevant).
 
-[ List the Lambda functions in this phase's architecture and state their working status - Fully implemented / Partially working / Not implemented. For partially working lambdas, state briefly what is defective in their implementation.]
-
-e.g.
-
 + Confirmation Mailer - Fully implemented.
 + Process Image - Fully implemented.
 + Update Table - Fully implemented.
-+ Delete Table - Fully Implemented.
++ Proccess Delete - Fully Implemented.
 + Delete Bucket Image - Fully Implemented.
 + Confirmation Mailer Lambda Trigger - Fully Implemented.
++ Delete/Add Mailer - Fully implemented.
 
 
 
